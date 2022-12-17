@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "name": "Frontend",
+      "path": "./apps/insta-share"
+    },
+    {
+      "name": "Backend",
+      "path": "./apps/api"
+    },
+    {
+      "name": "Monorepo",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "eslint.format.enable": true,
+    "terminal.integrated.cwd": "${workspaceFolder:Monorepo}"
+  }
+}
