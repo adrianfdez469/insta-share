@@ -1,0 +1,44 @@
+
+type User {
+  id: ID!
+  email: String
+  password: String
+  files: [File]
+}
+
+type CreateUserResponse implements IResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  data: User
+}
+
+type DeleteUserResponse implements IResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+}
+
+type LoginUserData {
+  id: ID!
+  email: String!
+  token: String!
+  exp: Float!
+}
+type LoginUserResponse implements IResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  data: LoginUserData
+}
+
+type Query {
+  user(id: ID!): User
+  getUsers: [User]!
+}
+
+type Mutation {
+  createUser(email: String!, password: String!): CreateUserResponse
+  deleteUser(id: ID!): DeleteUserResponse
+  loginUser(email: String!, password: String!): LoginUserResponse
+}

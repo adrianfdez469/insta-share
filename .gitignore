@@ -40,3 +40,8 @@ Thumbs.db
 
 # Next.js
 .next
+
+# Secrets
+.env.docker
+.env.local
+.env

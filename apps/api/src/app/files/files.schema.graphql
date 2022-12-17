@@ -1,0 +1,7 @@
+type File {
+  id: ID!
+  name: String!
+  status: String!
+  size: Int!
+  url: String
+}
