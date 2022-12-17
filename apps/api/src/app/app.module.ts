@@ -1,8 +1,8 @@
 import { join } from 'path';
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
+//import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
-import { AppController } from './app.controller';
+//import { AppController } from './app.controller';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UsersModule } from './users/users.module';
 
@@ -19,7 +19,7 @@ import { UsersModule } from './users/users.module';
       }
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  //controllers: [AppController],
+  //providers: [AppService],
 })
 export class AppModule {}
