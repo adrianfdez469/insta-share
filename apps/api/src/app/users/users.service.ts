@@ -35,7 +35,7 @@ export class UsersService {
   }
 
   async generateUserToken(email: string, password: string): Promise<LoginUserData> {
-    const user = await this.userModel.findOne({email}).exec();
+    const user = await this.userModel.findOne({email}).select('password').exec();
     if(user && bcrypt.compareSync(password, user.password)) {
       
       const JWT_SECRET = process.env.NEST_JWT_SECRET;

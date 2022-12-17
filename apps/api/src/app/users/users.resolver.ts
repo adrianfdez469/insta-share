@@ -3,8 +3,6 @@ import { FilesService } from "../files/files.service";
 import { CreateUserResponse, DeleteUserResponse, LoginUserResponse, User } from "../graphql";
 import { UsersService } from './users.service';
 
-// TODO: hide password field for graphql query
-
 @Resolver('User')
 export class UsersResolver {
   constructor(
