@@ -6,17 +6,23 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
-import { AppModule } from './app/app.module';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3333;
+  const port = process.env.API_PORT || 3333;
+  app.enableCors();
   await app.listen(port);
+
   Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 Express application is running on: http://localhost:${port}/${globalPrefix}`
   );
+  Logger.log(
+    `🚀 Graphql application is running on: http://localhost:${port}/graphql`
+  );
+
 }
 
 bootstrap();

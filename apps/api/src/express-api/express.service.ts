@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class AppService {
+export class ExpressService {
   getData(): { message: string } {
     return { message: 'Welcome to api!' };
+  }
+
+  async upload(file: any) {
+    console.log(file);
   }
 }
