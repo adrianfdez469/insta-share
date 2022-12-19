@@ -1,7 +1,7 @@
 {
-  "name": "api",
+  "name": "compressor",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/api/src",
+  "sourceRoot": "apps/compressor/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -10,10 +10,10 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/api",
-        "main": "apps/api/src/main.ts",
-        "tsConfig": "apps/api/tsconfig.app.json",
-        "assets": ["apps/api/src/assets"]
+        "outputPath": "dist/apps/compressor",
+        "main": "apps/compressor/src/main.ts",
+        "tsConfig": "apps/compressor/tsconfig.app.json",
+        "assets": ["apps/compressor/src/assets"]
       },
       "configurations": {
         "production": {
@@ -22,8 +22,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/api/src/environments/environment.ts",
-              "with": "apps/api/src/environments/environment.prod.ts"
+              "replace": "apps/compressor/src/environments/environment.ts",
+              "with": "apps/compressor/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -38,11 +38,11 @@
       ],
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "api:build"
+        "buildTarget": "compressor:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "api:build:production"
+          "buildTarget": "compressor:build:production"
         }
       }
     },
@@ -50,14 +50,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/api/**/*.ts"]
+        "lintFilePatterns": ["apps/compressor/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/api/jest.config.ts",
+        "jestConfig": "apps/compressor/jest.config.ts",
         "passWithNoTests": true
       }
     },

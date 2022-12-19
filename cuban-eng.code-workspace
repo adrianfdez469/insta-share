@@ -1,12 +1,16 @@
 {
   "folders": [
     {
-      "name": "Frontend",
+      "name": "Next Frontend",
       "path": "./apps/insta-share"
     },
     {
-      "name": "Backend",
-      "path": "./apps/api"
+      "name": "API Backend",
+      "path": "./apps/api/src"
+    },
+    {
+      "name": "Compressor Backend",
+      "path": "./apps/compressor/src"
     },
     {
       "name": "Monorepo",
