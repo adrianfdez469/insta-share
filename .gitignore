@@ -42,6 +42,4 @@ Thumbs.db
 .next
 
 # Secrets
-.env.docker
-.env.local
-.env
+.env*
