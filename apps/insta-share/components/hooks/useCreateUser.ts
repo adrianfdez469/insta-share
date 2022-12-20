@@ -6,7 +6,7 @@ export const CREATE_USER_MUTATION = gql`
       code
       success
       message
-      user {
+      data {
         id
         email
       }

@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import NextLink from '../../components/ui/nextLink';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../../components/contexts/authContext';
 import { useAuthGuard } from '../../components/hooks/useAuthGuard';
 
@@ -18,14 +18,20 @@ import { useAuthGuard } from '../../components/hooks/useAuthGuard';
 export function SignIn() {
 
   const { login } = useContext(AuthContext);
+  const [error, setError] = useState<string>();
   useAuthGuard();
   
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email') as string;
     const pass = data.get('password') as string;
-    login(email, pass)
+    const success = await login(email, pass)
+    if(!success){
+      setError('Wrong credentials!')
+    } else {
+      setError(undefined);
+    }
   };
   
   return (
@@ -65,6 +71,8 @@ export function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={!!error}
+                helperText={error ? error : ''}
               />
               <Button
                 type="submit"

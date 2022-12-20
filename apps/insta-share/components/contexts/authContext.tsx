@@ -7,7 +7,7 @@ interface IAuthContext {
   state?: IState,
   loading: boolean,
   error?: ApolloError
-  login: (email: string, password: string) => Promise<void>
+  login: (email: string, password: string) => Promise<boolean>
   logout: () => void
   isAuth: boolean
 }
@@ -46,13 +46,20 @@ const AuthProvider:FC<PropsWithChildren> = ({children}) => {
   
   const login = async (email: string, password: string) => {
     const data = await loginUser({variables: { email, password }});
+console.log(data);
+
+    if(data.data.loginUser.success) {
+      const userAuthData = data.data.loginUser.data;
+      // Change context value
+      setState(userAuthData);
+      setIsAuth(true);
+      // Change local storage value
+      setStorageData(userAuthData);
+      return true;
+    } else {
+      return false;
+    }
     
-    const userAuthData = data.data.loginUser.data;
-    // Change context value
-    setState(userAuthData);
-    setIsAuth(true);
-    // Change local storage value
-    setStorageData(userAuthData);
   }
 
   const logout = () => {
