@@ -1,7 +1,13 @@
+enum FILE_STATUS {
+  UPLOADED
+  COMPRESSING
+  COMPRESSED
+}
+
 type File {
   id: ID!
   name: String!
-  status: String!
+  status: FILE_STATUS!
   size: Int!
   zipped_size: Int
   url: String

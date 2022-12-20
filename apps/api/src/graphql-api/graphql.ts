@@ -8,6 +8,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export enum FILE_STATUS {
+    UPLOADED = "UPLOADED",
+    COMPRESSING = "COMPRESSING",
+    COMPRESSED = "COMPRESSED"
+}
+
 export interface IResponse {
     code: string;
     success: boolean;
@@ -18,7 +24,7 @@ export class File {
     __typename?: 'File';
     id: string;
     name: string;
-    status: string;
+    status: FILE_STATUS;
     size: number;
     zipped_size?: Nullable<number>;
     url?: Nullable<string>;

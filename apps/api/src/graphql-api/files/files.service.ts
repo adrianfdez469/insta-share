@@ -16,9 +16,7 @@ export class FilesService {
   }
 
   async saveFile(name, status, size, url, userId): Promise<IFile> {
-    
     const file = new this.fileModel({name, size, url, status, user: userId});
-    
     await file.save();
     return file;
   }
