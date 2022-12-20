@@ -2,8 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { FILE_MODEL } from "../../constants";
 import { Model } from "mongoose";
 import { IFile } from "./files.interface";
-import { File } from "../graphql"; 
-import { IUser } from "../users/user.interface";
+import { File } from "@cuban-eng/common";
 
 @Injectable()
 export class FilesService {

@@ -2,10 +2,8 @@ import { Controller, Logger } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
 
 
-import { RMQ_PATTERNS } from '@cuban-eng/common'
+import { RMQ_PATTERNS, FILE_STATUS } from '@cuban-eng/common'
 import { FilesService } from './files.service';
-import { FILE_STATUS } from '../graphql';
-
 
 @Controller()
 export class FilesController {

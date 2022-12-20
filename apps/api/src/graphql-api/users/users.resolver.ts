@@ -1,6 +1,7 @@
 import { Resolver, ResolveField, Query, Args, Parent, Mutation } from "@nestjs/graphql";
 import { FilesService } from "../files/files.service";
-import { CreateUserResponse, DeleteUserResponse, LoginUserResponse, User } from "../graphql";
+import { CreateUserResponse, DeleteUserResponse, LoginUserResponse, User } from "@cuban-eng/common";
+
 import { UsersService } from './users.service';
 
 @Resolver('User')

@@ -14,7 +14,7 @@ import { FilesModule } from './files/files.module';
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'],
       definitions: {
-        path: join(process.cwd(), 'apps/api/src/graphql-api/graphql.ts'),
+        path: join(process.cwd(), 'libs/common/src/lib/graphql.ts'),
         outputAs: 'class',
         emitTypenameField: true
       }

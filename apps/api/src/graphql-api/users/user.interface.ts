@@ -1,4 +1,4 @@
 import { Document } from "mongoose";
-import { User } from "../graphql";
+import { User } from "@cuban-eng/common";
 
 export interface IUser  extends Omit<User, 'id' >, Document {}

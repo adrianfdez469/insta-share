@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, ResolveField, Parent } from "@nestjs/graphql";
 import { FilesService } from "./files.service";
 import { Query } from "@nestjs/graphql";
-import { DeleteFileResponse } from "../graphql";
+import { DeleteFileResponse } from "@cuban-eng/common";
 
 
 

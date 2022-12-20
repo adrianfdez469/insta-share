@@ -4,9 +4,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { USER_MODEL } from '../../constants';
 import { IUser } from './user.interface';
-import { LoginUserData } from '../graphql';
-
-
+import { LoginUserData } from '@cuban-eng/common';
 
 @Injectable()
 export class UsersService {
