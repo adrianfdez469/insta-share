@@ -1,5 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
-
+import { Controller, Get, Inject, Logger } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { AppService } from './app.service';
 import { EventPattern } from '@nestjs/microservices';
 import { RMQ_PATTERNS } from '@cuban-eng/common'
@@ -7,23 +7,33 @@ import { RMQ_PATTERNS } from '@cuban-eng/common'
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService) {}
+    @Inject('API_EMITTER') private readonly app_emitter: ClientProxy,
+    private readonly appService: AppService
+  ) {}
 
   @Get()
   getData() {
     return this.appService.getData();
   }
 
-  @EventPattern(RMQ_PATTERNS.RMQ_PATTERN_FILE_SAVED)
-  async handleMessagePrinted(data: Record<string, unknown>) {
-    console.log('Recibe message');
-    console.log(data);
+  @EventPattern(RMQ_PATTERNS.RMQ_PATTERN_FILE_UPLOADED)
+  async handleFileUploaded(data: {userId: string, name: string}) {
+    Logger.log(`🛬 FROM COMPRESSOR RECEIVING FILE_UPLOADED EVENT`)
 
-    const file = await this.appService.getFile()
-    const compressedFile = await this.appService.compressFile(file);
-    await this.appService.saveFile(compressedFile);
+    Logger.log(`🛫 FROM COMPRESSOR EMITTING FILE_COMPRESSING EVENT`)
+    this.app_emitter.emit<any>(RMQ_PATTERNS.RMQ_PATTERN_FILE_COMPRESSING, {
+      userId: data.userId,
+      uniquename: data.name,
+    });
+    
+    const {name, size} = await this.appService.compressFile(`uploads`, `public`, data.name as string);
 
-    
-    
+    Logger.log(`🛫 FROM COMPRESSOR EMITTING FILE_COMPRESSED_SAVED EVENT`)
+    this.app_emitter.emit<any>(RMQ_PATTERNS.RMQ_PATTERN_FILE_COMPRESSED_SAVED, {
+      userId: data.userId,
+      old_uniquename: data.name,
+      new_compressed_name: name,
+      new_size: size
+    });
   }
 }

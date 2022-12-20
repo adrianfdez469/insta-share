@@ -25,7 +25,7 @@ export class UsersResolver {
   @ResolveField('files')
   async getFiles(@Parent() user) {
     const { id } = user;
-    return this.filesService.findAll({ authorId: id });
+    return this.filesService.findAll(id);
   }
 
   @Mutation()

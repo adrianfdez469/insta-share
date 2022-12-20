@@ -26,6 +26,7 @@ export class UsersService {
   async createUser(email: string, password: string): Promise<IUser> {
     const encryptedPass = bcrypt.hashSync(password, bcrypt.genSaltSync());
     const user = new this.userModel({email, password: encryptedPass});
+    
     await user.save();
     return user;
   }

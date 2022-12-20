@@ -3,5 +3,22 @@ type File {
   name: String!
   status: String!
   size: Int!
+  zipped_size: Int
   url: String
+  user: ID!
+}
+
+type DeleteFileResponse implements IResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+}
+
+type Query {
+  getFiles(user: String!): [File]!
+}
+
+type Mutation {
+  deleteFile(id: ID!): DeleteFileResponse!
+  deleteAllFiles: DeleteFileResponse!
 }

@@ -1,12 +1,13 @@
-import { Controller, Get,  UseInterceptors, Post, UploadedFile, Body, Inject } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { ClientProxy } from '@nestjs/microservices';
+import { Controller, Get,  UseInterceptors, Post, UploadedFile, Body, Inject, UploadedFiles, Logger } from '@nestjs/common';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { ClientProxy, EventPattern } from '@nestjs/microservices';
 
 import { Express } from 'express';
 // This is a hack to make Multer available in the Express namespace
-import { Multer } from 'multer';
-import { RMQ_SERVICE_NAME, RMQ_PATTERNS } from '@cuban-eng/common'
-import { ExpressService } from './express.service'
+import { Multer, diskStorage } from 'multer';
+
+import { RMQ_PATTERNS } from '@cuban-eng/common'
+
 
 type File = Express.Multer.File;
 
@@ -14,40 +15,49 @@ type File = Express.Multer.File;
 export class ExpressController {
 
   constructor(
-    @Inject(RMQ_SERVICE_NAME) private readonly client: ClientProxy,
-    private readonly service: ExpressService,
+    @Inject('COMPRESSOR_EMMITER') private readonly compressor_emitter: ClientProxy,
+    @Inject('API_EMMITER') private readonly api_emitter: ClientProxy
   ) { }
   
-
-  
-
-  @Get()
-  getData() {
-    return this.service.getData()
-  }
-
+  // TODO: allow only if authentication token is ok
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, './uploads')
+        },
+        filename: (req, file, cb) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+          cb(null, uniqueSuffix + '-' + file.originalname.split(' ').join('_'))
+        }
+      })
+    })
+  )
   async uploadFile(
     @Body() params,
-    @UploadedFile(
-    /*new ParseFilePipeBuilder()
-      .addMaxSizeValidator({ maxSize: 15000000 })
-      .build({
-        errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
-      })*/
-  ) file: File) {
-    console.log(params);
+    @UploadedFile() file: File) {
+    const { user } = params;
     
-
-    const data = await this.service.upload(file);
-
-    
-    this.client.emit<any>(RMQ_PATTERNS.RMQ_PATTERN_FILE_SAVED, {
-      userId: params.user,
-      name: file.originalname
+    Logger.log(`🛫 FROM EXPRESS EMITTING FILE_UPLOADED EVENT`);
+    // Emitting event to compressor microservice
+    this.compressor_emitter.emit<any>(RMQ_PATTERNS.RMQ_PATTERN_FILE_UPLOADED, {
+      userId: user,
+      name: file.filename,
+      size: file.size,
+      originalname: file.originalname,
+      savePath: 'uploads',
     });
 
-    return data;
+    // Emitting event to api microservice
+    this.api_emitter.emit<any>(RMQ_PATTERNS.RMQ_PATTERN_FILE_UPLOADED, {
+      userId: user,
+      name: file.filename,
+      size: file.size,
+      originalname: file.originalname,
+      savePath: 'uploads',
+    });
+
+    
   }
 }

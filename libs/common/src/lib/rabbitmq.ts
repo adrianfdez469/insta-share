@@ -6,4 +6,16 @@ export const RMQ_PATTERNS = {
   RMQ_PATTERN_FILE_COMPRESSED: 'file_compressed'
 }
 
-export const RMQ_SERVICE_NAME = "FILES_SERVICE";
+const rmqUser = process.env.RABBITMQ_DEFAULT_USER;
+  const rmqPass = process.env.RABBITMQ_DEFAULT_PASS;
+  const rmqDomain = process.env.RABBITMQ_DOMAIN;
+  const rmqPort = process.env.RABBITMQ_PORT;
+  const rmqVHost = process.env.RABBITMQ_DEFAULT_VHOST;
+  
+export const RMQ_CONNECTION_STRING = `amqp://${rmqUser}:${rmqPass}@${rmqDomain}:${rmqPort}/${rmqVHost}`;
+
+
+export const RMW_QUEUES = {
+  API_QUEUE: 'API_QUEUE',
+  COMPRESSOR_QUEUE: 'COMPRESSOR_QUEUE' 
+}

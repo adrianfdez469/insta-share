@@ -29,6 +29,7 @@
         }
       }
     },
+
     "serve": {
       "dependsOn": [
         {
@@ -46,6 +47,8 @@
         }
       }
     },
+
+
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

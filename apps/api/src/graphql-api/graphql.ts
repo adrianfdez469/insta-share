@@ -20,7 +20,40 @@ export class File {
     name: string;
     status: string;
     size: number;
+    zipped_size?: Nullable<number>;
     url?: Nullable<string>;
+    user: string;
+}
+
+export class DeleteFileResponse implements IResponse {
+    __typename?: 'DeleteFileResponse';
+    code: string;
+    success: boolean;
+    message: string;
+}
+
+export abstract class IQuery {
+    __typename?: 'IQuery';
+
+    abstract getFiles(user: string): Nullable<File>[] | Promise<Nullable<File>[]>;
+
+    abstract user(id: string): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract getUsers(): Nullable<User>[] | Promise<Nullable<User>[]>;
+}
+
+export abstract class IMutation {
+    __typename?: 'IMutation';
+
+    abstract deleteFile(id: string): DeleteFileResponse | Promise<DeleteFileResponse>;
+
+    abstract deleteAllFiles(): DeleteFileResponse | Promise<DeleteFileResponse>;
+
+    abstract createUser(email: string, password: string): Nullable<CreateUserResponse> | Promise<Nullable<CreateUserResponse>>;
+
+    abstract deleteUser(id: string): Nullable<DeleteUserResponse> | Promise<Nullable<DeleteUserResponse>>;
+
+    abstract loginUser(email: string, password: string): Nullable<LoginUserResponse> | Promise<Nullable<LoginUserResponse>>;
 }
 
 export class User {
@@ -60,24 +93,6 @@ export class LoginUserResponse implements IResponse {
     success: boolean;
     message: string;
     data?: Nullable<LoginUserData>;
-}
-
-export abstract class IQuery {
-    __typename?: 'IQuery';
-
-    abstract user(id: string): Nullable<User> | Promise<Nullable<User>>;
-
-    abstract getUsers(): Nullable<User>[] | Promise<Nullable<User>[]>;
-}
-
-export abstract class IMutation {
-    __typename?: 'IMutation';
-
-    abstract createUser(email: string, password: string): Nullable<CreateUserResponse> | Promise<Nullable<CreateUserResponse>>;
-
-    abstract deleteUser(id: string): Nullable<DeleteUserResponse> | Promise<Nullable<DeleteUserResponse>>;
-
-    abstract loginUser(email: string, password: string): Nullable<LoginUserResponse> | Promise<Nullable<LoginUserResponse>>;
 }
 
 type Nullable<T> = T | null;
