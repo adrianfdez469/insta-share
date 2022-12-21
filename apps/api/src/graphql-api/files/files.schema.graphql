@@ -28,3 +28,7 @@ type Mutation {
   deleteFile(id: ID!): DeleteFileResponse!
   deleteAllFiles: DeleteFileResponse!
 }
+
+type Subscription {
+  fileChanged(userId: ID): File!
+}

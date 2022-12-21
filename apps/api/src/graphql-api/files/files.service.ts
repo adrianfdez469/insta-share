@@ -20,10 +20,11 @@ export class FilesService {
     return file;
   }
 
-  async updateByUrl(url: string, data: Partial<File>) {
+  async updateByUrl(url: string, data: Partial<File>): Promise<IFile> {
     const file = await this.fileModel.findOne({url: url});
     Object.assign(file, data);
     await file.save();
+    return file;
   }
 
   async deleteFile(id): Promise<IFile> {

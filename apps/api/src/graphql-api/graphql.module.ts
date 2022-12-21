@@ -12,6 +12,7 @@ import { FilesModule } from './files/files.module';
     FilesModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      installSubscriptionHandlers: true,
       typePaths: ['./**/*.graphql'],
       definitions: {
         path: join(process.cwd(), 'libs/common/src/lib/graphql.ts'),

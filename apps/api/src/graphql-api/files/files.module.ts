@@ -6,9 +6,8 @@ import { FilesResolver } from "./files.resolver";
 import { FilesController } from "./files.controller";
 
 @Module({
-
   imports: [FilesModule, DatabaseModule],
-  providers: [FilesService, FilesResolver, ...filesProviders],
+  providers: [FilesService, FilesResolver, ...filesProviders as []],
   exports: [FilesService],
   controllers: [FilesController],
 })

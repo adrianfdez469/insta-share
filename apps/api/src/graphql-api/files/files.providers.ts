@@ -1,6 +1,7 @@
 import { Connection } from 'mongoose';
 import { FileSchema } from './files.schema';
-import { DATABASE_CONNECTION, FILE_MODEL } from '../../constants';
+import { DATABASE_CONNECTION, FILE_MODEL, PUB_SUB } from '../../constants';
+import { PubSub } from 'graphql-subscriptions'
 
 export const filesProviders = [
   {
@@ -8,4 +9,8 @@ export const filesProviders = [
     useFactory: (connection: Connection) => connection.model('File', FileSchema),
     inject: [DATABASE_CONNECTION],
   },
+  {
+    provide: PUB_SUB,
+    useValue: new PubSub(),
+  }
 ];

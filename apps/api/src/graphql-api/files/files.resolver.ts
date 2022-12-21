@@ -1,14 +1,18 @@
-import { Resolver, Mutation, Args, ResolveField, Parent } from "@nestjs/graphql";
+import { Resolver, Mutation, Args, ResolveField, Parent, Subscription } from "@nestjs/graphql";
 import { FilesService } from "./files.service";
 import { Query } from "@nestjs/graphql";
-import { DeleteFileResponse } from "@cuban-eng/common";
-
+import { DeleteFileResponse, File } from "@cuban-eng/common";
+import { PubSub } from 'graphql-subscriptions';
+import { Inject } from "@nestjs/common";
+import { PUB_SUB } from "../../constants";
 
 
 @Resolver('File')
 export class FilesResolver {
   
-  constructor(private filesService: FilesService) {}
+  constructor(
+    @Inject(PUB_SUB) private readonly pubSub: PubSub,
+    private filesService: FilesService) { }
 
   @Query()
   async getFiles(@Args('user') userId) {
@@ -38,6 +42,18 @@ export class FilesResolver {
     } catch (error) {
       return { code: '500', message: 'ERROR', success: false }  
     }
+  }
+
+  @Subscription(
+    (returns) => File,
+    {
+      filter(payload, variables, context) {
+        return payload.fileChanged.user.toString() === variables.userId
+      },
+    }
+  )
+  fileChanged() {
+    return this.pubSub.asyncIterator('fileChanged');
   }
   
 
