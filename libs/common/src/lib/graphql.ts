@@ -62,6 +62,12 @@ export abstract class IMutation {
     abstract loginUser(email: string, password: string): Nullable<LoginUserResponse> | Promise<Nullable<LoginUserResponse>>;
 }
 
+export abstract class ISubscription {
+    __typename?: 'ISubscription';
+
+    abstract fileChanged(userId: string): File | Promise<File>;
+}
+
 export class User {
     __typename?: 'User';
     id: string;
