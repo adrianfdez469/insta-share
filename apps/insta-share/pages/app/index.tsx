@@ -1,7 +1,6 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   AppBar,
-  Backdrop,
   Button,
   CircularProgress,
   IconButton,
@@ -24,8 +23,11 @@ import { useAuthGuard } from '../../components/hooks/useAuthGuard';
 import { useFileUpload } from '../../components/hooks/useFileUpload';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useFiles } from '../../components/hooks/useFiles';
-import { File, niceBytes } from '@cuban-eng/common';
-
+import { FILE_STATUS, File, niceBytes } from '@cuban-eng/common';
+import EditIcon from '@mui/icons-material/Edit';
+import { FileDialog } from '../../components/ui/fileDialog/fileDialog';
+import { BackDrop } from '../../components/ui/BackDrop';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 
 const AppPageWrapper: React.FC = () => {
   
@@ -52,14 +54,24 @@ const AppPage: React.FC<IProps> = ({id: userId, logout}) => {
   const { upload, loading } = useFileUpload();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const {data, loading: loadingFiles, subscribeToFilesChange} = useFiles(userId);
+  const [fileSelected, setFileSelected] = useState<File>();
   
-  
+  const handleFileSelected = (file: File) => {
+    setFileSelected(file);
+  }
+
+  const handleFileDeselected = () => {
+    setFileSelected(undefined)
+  }
+
   const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
       return;
     }
     const file = e.target.files[0];
-    await upload(file);
+    if(file){
+      await upload(file);
+    }
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -125,7 +137,6 @@ const AppPage: React.FC<IProps> = ({id: userId, logout}) => {
             <TableCell align="right">Status</TableCell>
             
             <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>
 
@@ -140,10 +151,19 @@ const AppPage: React.FC<IProps> = ({id: userId, logout}) => {
               </TableCell>
               <TableCell align="right">{niceBytes(file.size.toString())}</TableCell>
               <TableCell align="right">{niceBytes((file.zipped_size || 0).toString())}</TableCell>
-              <TableCell align="right">{file.status}</TableCell>
+              <TableCell align="right">{file.status} { file.status !== FILE_STATUS.COMPRESSED && <CircularProgress size={16} /> }</TableCell>
               
-              <TableCell align="right"></TableCell>
-              <TableCell align="right"></TableCell>
+              <TableCell align="right">
+                <IconButton color="primary" aria-label="Edit file" onClick={() => handleFileSelected(file)}>
+                    <EditIcon />
+                </IconButton>
+              </TableCell>
+              
+              <TableCell align="right">
+                <IconButton disabled={file.status !== FILE_STATUS.COMPRESSED} color="primary" aria-label="Download file" onClick={() => console.log('not implemented')}>
+                    <CloudDownloadIcon />
+                </IconButton>
+              </TableCell>
 
             </TableRow>
           ))}
@@ -161,13 +181,14 @@ const AppPage: React.FC<IProps> = ({id: userId, logout}) => {
         <input type="file" hidden onChange={handleFileUpload} />
       </Button>
 
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading || loadingFiles}
-        onClick={handleClose}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <BackDrop open={loading || loadingFiles} />
+      {fileSelected && 
+        <FileDialog 
+          file={fileSelected} 
+          handleClose={handleFileDeselected} 
+          handleSave={(newFileName) => { console.log('not implemented'); }} 
+        />
+      }
     </>
   );
 };
