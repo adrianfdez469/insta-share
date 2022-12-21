@@ -30,5 +30,5 @@ type Mutation {
 }
 
 type Subscription {
-  fileChanged(userId: ID): File!
+  fileChanged(userId: ID!): File!
 }

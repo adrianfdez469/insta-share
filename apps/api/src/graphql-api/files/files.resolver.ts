@@ -48,7 +48,7 @@ export class FilesResolver {
     (returns) => File,
     {
       filter(payload, variables, context) {
-        return payload.fileChanged.user.toString() === variables.userId
+        return payload.fileChanged.user.toString() === variables.userId.toString()
       },
     }
   )
