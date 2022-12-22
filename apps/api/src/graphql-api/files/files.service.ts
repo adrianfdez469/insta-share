@@ -27,6 +27,13 @@ export class FilesService {
     return file;
   }
 
+  async update(id:string, data: Partial<File> ): Promise<IFile> {
+    const file = await this.fileModel.findById(id)
+    Object.assign(file, data);
+    await file.save();
+    return file;
+  }
+
   async deleteFile(id): Promise<IFile> {
     return await this.fileModel.findByIdAndRemove(id).exec();
   }

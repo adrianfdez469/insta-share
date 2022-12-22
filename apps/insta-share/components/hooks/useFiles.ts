@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { File } from "@cuban-eng/common";
 
 const FETCH_USERS_FILES_QUERY = gql`
@@ -27,6 +27,24 @@ export const FILES_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const MUTATION_UPDATE_FILE = gql`
+  mutation ($id: ID!, $name: String) {
+    updateFile (id: $id, name: $name) {
+    code
+    success
+    message
+    data {
+      id
+      name
+      status
+      size
+      zipped_size
+      url
+      user
+    }
+  }
+}`;
 
 export const useFiles = (userId: string) => {
   const {data, refetch, loading, error, subscribeToMore} = useQuery(FETCH_USERS_FILES_QUERY, {
@@ -77,5 +95,21 @@ export const useFiles = (userId: string) => {
         }
       })
     }
+  }
+}
+
+export const useMutateFile = () => {
+  
+  const [updateFile, { loading, error }] = useMutation(MUTATION_UPDATE_FILE);
+
+  const updateFileHandler = async (id: string, name: string) => {
+    const data = await updateFile({variables: { id, name }})
+    return data.data;
+  }
+
+  return {
+    updateFile: updateFileHandler,
+    loading,
+    error
   }
 }

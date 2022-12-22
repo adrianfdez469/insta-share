@@ -42,7 +42,7 @@ const FileDialog:React.FC<IProps> = ({file, handleClose, handleSave}) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button disabled={file.status !== FILE_STATUS.COMPRESSED || file.name === `${name}.${type}`} onClick={() => handleSave(name)}>Save</Button>
+          <Button disabled={file.status !== FILE_STATUS.COMPRESSED || file.name === `${name}.${type}`} onClick={() => handleSave(`${name}.${type}`)}>Save</Button>
         </DialogActions>
       </Dialog>
   )

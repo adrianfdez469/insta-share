@@ -31,6 +31,14 @@ export class File {
     user: string;
 }
 
+export class UpdateFileResponse implements IResponse {
+    __typename?: 'UpdateFileResponse';
+    code: string;
+    success: boolean;
+    message: string;
+    data?: Nullable<File>;
+}
+
 export class DeleteFileResponse implements IResponse {
     __typename?: 'DeleteFileResponse';
     code: string;
@@ -54,6 +62,8 @@ export abstract class IMutation {
     abstract deleteFile(id: string): DeleteFileResponse | Promise<DeleteFileResponse>;
 
     abstract deleteAllFiles(): DeleteFileResponse | Promise<DeleteFileResponse>;
+
+    abstract updateFile(id: string, name?: Nullable<string>): UpdateFileResponse | Promise<UpdateFileResponse>;
 
     abstract createUser(email: string, password: string): Nullable<CreateUserResponse> | Promise<Nullable<CreateUserResponse>>;
 

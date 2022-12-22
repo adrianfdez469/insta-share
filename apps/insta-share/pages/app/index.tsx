@@ -20,9 +20,9 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../../components/contexts/authContext';
 import { useContext } from 'react';
 import { useAuthGuard } from '../../components/hooks/useAuthGuard';
-import { useFileUpload } from '../../components/hooks/useFileUpload';
+import { useFileTransfer } from '../../components/hooks/useFileTransfer';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { useFiles } from '../../components/hooks/useFiles';
+import { useFiles, useMutateFile } from '../../components/hooks/useFiles';
 import { FILE_STATUS, File, niceBytes } from '@cuban-eng/common';
 import EditIcon from '@mui/icons-material/Edit';
 import { FileDialog } from '../../components/ui/fileDialog/fileDialog';
@@ -49,15 +49,27 @@ interface IProps  {
   exp: number,
   logout: () => void
 }
-const AppPage: React.FC<IProps> = ({id: userId, logout}) => {
+const AppPage: React.FC<IProps> = ({id: userId, token, logout}) => {
   
-  const { upload, loading } = useFileUpload();
+  const { upload, loading, download } = useFileTransfer(token);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const {data, loading: loadingFiles, subscribeToFilesChange} = useFiles(userId);
+  const {data, loading: loadingFiles, subscribeToFilesChange, refetch} = useFiles(userId);
   const [fileSelected, setFileSelected] = useState<File>();
+  const { updateFile, error, loading: loadingUpdate } = useMutateFile()
   
+  const handleSaveFileName = async (id: string, name: string) => {
+    
+    if(fileSelected) {
+      
+      await updateFile(id, name);
+      refetch({userId: userId});
+      setFileSelected(undefined);
+    }
+  }
+
   const handleFileSelected = (file: File) => {
     setFileSelected(file);
+
   }
 
   const handleFileDeselected = () => {
@@ -160,7 +172,10 @@ const AppPage: React.FC<IProps> = ({id: userId, logout}) => {
               </TableCell>
               
               <TableCell align="right">
-                <IconButton disabled={file.status !== FILE_STATUS.COMPRESSED} color="primary" aria-label="Download file" onClick={() => console.log('not implemented')}>
+                <IconButton 
+                  disabled={file.status !== FILE_STATUS.COMPRESSED} 
+                  color="primary" aria-label="Download file" 
+                  onClick={() => download(file.url)}>
                     <CloudDownloadIcon />
                 </IconButton>
               </TableCell>
@@ -181,12 +196,12 @@ const AppPage: React.FC<IProps> = ({id: userId, logout}) => {
         <input type="file" hidden onChange={handleFileUpload} />
       </Button>
 
-      <BackDrop open={loading || loadingFiles} />
+      <BackDrop open={loading || loadingFiles || loadingUpdate} />
       {fileSelected && 
         <FileDialog 
           file={fileSelected} 
           handleClose={handleFileDeselected} 
-          handleSave={(newFileName) => { console.log('not implemented'); }} 
+          handleSave={(newFileName) => { handleSaveFileName(fileSelected.id, newFileName) }} 
         />
       }
     </>

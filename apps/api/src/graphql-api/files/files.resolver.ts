@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, ResolveField, Parent, Subscription } from "@nestjs/graphql";
 import { FilesService } from "./files.service";
 import { Query } from "@nestjs/graphql";
-import { DeleteFileResponse, File } from "@cuban-eng/common";
+import { DeleteFileResponse, File, UpdateFileResponse, } from "@cuban-eng/common";
 import { PubSub } from 'graphql-subscriptions';
 import { Inject } from "@nestjs/common";
 import { PUB_SUB } from "../../constants";
@@ -39,6 +39,16 @@ export class FilesResolver {
     try {
       await this.filesService.deleteAllFile();
       return { code: '200', message: 'FILES DELETED', success: true }  
+    } catch (error) {
+      return { code: '500', message: 'ERROR', success: false }  
+    }
+  }
+  
+  @Mutation()
+  async updateFile(@Args('id') id: string, @Args('name') name: string): Promise<UpdateFileResponse> {
+    try {
+      const file = await this.filesService.update(id, {name: name});
+      return { code: '200', message: 'FILES DELETED', success: true, data: file as File }  
     } catch (error) {
       return { code: '500', message: 'ERROR', success: false }  
     }

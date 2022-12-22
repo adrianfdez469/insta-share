@@ -14,6 +14,13 @@ type File {
   user: ID!
 }
 
+type UpdateFileResponse implements IResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  data: File
+}
+
 type DeleteFileResponse implements IResponse {
   code: String!
   success: Boolean!
@@ -27,6 +34,7 @@ type Query {
 type Mutation {
   deleteFile(id: ID!): DeleteFileResponse!
   deleteAllFiles: DeleteFileResponse!
+  updateFile(id: ID!, name: String): UpdateFileResponse!
 }
 
 type Subscription {

@@ -1,12 +1,14 @@
-import { Controller, Get,  UseInterceptors, Post, UploadedFile, Body, Inject, UploadedFiles, Logger } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { ClientProxy, EventPattern } from '@nestjs/microservices';
+import { Controller, Get,  UseInterceptors, Post, UploadedFile, Body, Inject, Logger, Res, Param } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ClientProxy } from '@nestjs/microservices';
 
-import { Express } from 'express';
+import { Express, Response } from 'express';
 // This is a hack to make Multer available in the Express namespace
 import { Multer, diskStorage } from 'multer';
 
 import { RMQ_PATTERNS } from '@cuban-eng/common'
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 
 type File = Express.Multer.File;
@@ -59,5 +61,16 @@ export class ExpressController {
     });
 
     
+  }
+
+  @Get('download/:url')
+  download(@Res() res: Response, @Param('url') url: string) {
+    const file = createReadStream(join(process.cwd(),'public', url));
+    file.pipe(res);
+  }
+
+  @Get('health')
+  checkHealth() {
+    return 'OK';
   }
 }
