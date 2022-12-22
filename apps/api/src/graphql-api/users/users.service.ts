@@ -33,9 +33,24 @@ export class UsersService {
     return await this.userModel.findByIdAndRemove(id).exec();
   }
 
+  async findOne(email: string): Promise<IUser> {
+    return await this.userModel.findOne({email}).select('password').exec();
+  }
+
+  async validateUser(email: string, pass: string): Promise<Partial<IUser>> {
+    const user = await this.findOne(email);
+    if(user && bcrypt.compareSync(pass, user.password)) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
+
   async generateUserToken(email: string, password: string): Promise<LoginUserData> {
-    const user = await this.userModel.findOne({email}).select('password').exec();
-    if(user && bcrypt.compareSync(password, user.password)) {
+
+    const user = await this.validateUser(email, password);
+
+    if(user ) {
       
       const JWT_SECRET = process.env.NEST_JWT_SECRET;
       
@@ -60,5 +75,7 @@ export class UsersService {
       throw Error('WRONG CREDENTIALS')
     }
   }
+
+  
 }
 
