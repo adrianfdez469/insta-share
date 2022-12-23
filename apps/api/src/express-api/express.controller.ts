@@ -1,4 +1,4 @@
-import { Controller, Get,  UseInterceptors, Post, UploadedFile, Body, Inject, Logger, Res, Param } from '@nestjs/common';
+import { Controller, Get,  UseInterceptors, Post, UploadedFile, Body, Inject, Logger, Res, Param, UseGuards } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ClientProxy } from '@nestjs/microservices';
 
@@ -9,11 +9,13 @@ import { Multer, diskStorage } from 'multer';
 import { RMQ_PATTERNS } from '@cuban-eng/common'
 import { createReadStream } from 'fs';
 import { join } from 'path';
+import { AuthGuard } from '../auht/auth.guard';
 
 
 type File = Express.Multer.File;
 
 @Controller()
+@UseGuards(AuthGuard)
 export class ExpressController {
 
   constructor(

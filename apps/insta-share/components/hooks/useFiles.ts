@@ -46,13 +46,19 @@ export const MUTATION_UPDATE_FILE = gql`
   }
 }`;
 
-export const useFiles = (userId: string) => {
+export const useFiles = (userId: string, token: string) => {
+
   const {data, refetch, loading, error, subscribeToMore} = useQuery(FETCH_USERS_FILES_QUERY, {
     fetchPolicy: 'network-only',
     variables: {
       userId: userId
-    }
-  })
+    },
+    context: {
+      headers: {
+          "authorization": `Bearer ${token}`
+      }
+  }
+  },)
 
   return {
     loading,
@@ -98,9 +104,15 @@ export const useFiles = (userId: string) => {
   }
 }
 
-export const useMutateFile = () => {
+export const useMutateFile = (token: string) => {
   
-  const [updateFile, { loading, error }] = useMutation(MUTATION_UPDATE_FILE);
+  const [updateFile, { loading, error }] = useMutation(MUTATION_UPDATE_FILE, {
+    context: {
+      headers: {
+          "authorization": `Bearer ${token}`
+      }
+    }
+  });
 
   const updateFileHandler = async (id: string, name: string) => {
     const data = await updateFile({variables: { id, name }})

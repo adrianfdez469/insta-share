@@ -36,19 +36,24 @@ export const useFileTransfer = (token: string) => {
       const  [_, name] = url.split('/');
       await fetch(`${process.env.NEXT_PUBLIC_EXPRESS_ENDPOINT}/download/${name}`, {
         headers: {
-          'authorization': `Bearer12 ${token}`
+          'authorization': `Bearer ${token}`
         }
       })
-        .then( res => res.blob() )
-        .then( blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = name;
-            document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-            a.click();
-            a.remove(); 
-        });
+      .then( res => res.blob() )
+      .then( blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+        a.click();
+        a.remove();
+      })
+      .catch((error) => {
+        console.log(error);
+        
+      })
+
     } catch (error) {
       console.log(error);
     }

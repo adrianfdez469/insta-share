@@ -53,9 +53,9 @@ const AppPage: React.FC<IProps> = ({id: userId, token, logout}) => {
   
   const { upload, loading, download } = useFileTransfer(token);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const {data, loading: loadingFiles, subscribeToFilesChange, refetch} = useFiles(userId);
+  const {data, loading: loadingFiles, subscribeToFilesChange, refetch} = useFiles(userId, token);
   const [fileSelected, setFileSelected] = useState<File>();
-  const { updateFile, error, loading: loadingUpdate } = useMutateFile()
+  const { updateFile, error, loading: loadingUpdate } = useMutateFile(token)
   
   const handleSaveFileName = async (id: string, name: string) => {
     

@@ -3,6 +3,8 @@ import { FilesService } from "../files/files.service";
 import { CreateUserResponse, DeleteUserResponse, LoginUserResponse, User } from "@cuban-eng/common";
 
 import { UsersService } from './users.service';
+import { UseGuards } from "@nestjs/common";
+import { AuthGuardGraphQl } from "../../auht/auth.guard";
 
 @Resolver('User')
 export class UsersResolver {
@@ -11,18 +13,20 @@ export class UsersResolver {
     private filesService: FilesService,
   ) {}
 
+  @UseGuards(AuthGuardGraphQl)
   @Query('user')
   async getUser(@Args('id') id: string) {
     const user = await this.usersService.findOneById(id);
     return user; 
   }
 
+  @UseGuards(AuthGuardGraphQl)
   @Query()
   async getUsers() {
     return await this.usersService.list();
   }
 
-
+  @UseGuards(AuthGuardGraphQl)
   @ResolveField('files')
   async getFiles(@Parent() user) {
     const { id } = user;
@@ -42,6 +46,7 @@ export class UsersResolver {
     }
   }
 
+  @UseGuards(AuthGuardGraphQl)
   @Mutation()
   async deleteUser(@Args('id') id: string): Promise<DeleteUserResponse> {
     try {
@@ -56,6 +61,7 @@ export class UsersResolver {
     }
   }
   
+
   @Mutation()
   async loginUser(@Args('email') email: string, @Args('password') password: string): Promise<LoginUserResponse> {
     try {

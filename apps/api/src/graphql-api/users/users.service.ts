@@ -40,8 +40,7 @@ export class UsersService {
   async validateUser(email: string, pass: string): Promise<Partial<IUser>> {
     const user = await this.findOne(email);
     if(user && bcrypt.compareSync(pass, user.password)) {
-      const { password, ...result } = user;
-      return result;
+      return user;
     }
     return null;
   }
@@ -51,6 +50,7 @@ export class UsersService {
     const user = await this.validateUser(email, password);
 
     if(user ) {
+      console.log(user);
       
       const JWT_SECRET = process.env.NEST_JWT_SECRET;
       
@@ -63,6 +63,7 @@ export class UsersService {
         iat: issuedAt,
         exp: expirationDate
       }, JWT_SECRET)
+      
       return {
         id: user.id,
         email, 
