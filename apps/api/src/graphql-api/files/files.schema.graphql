@@ -1,0 +1,42 @@
+enum FILE_STATUS {
+  UPLOADED
+  COMPRESSING
+  COMPRESSED
+}
+
+type File {
+  id: ID!
+  name: String!
+  status: FILE_STATUS!
+  size: Int!
+  zipped_size: Int
+  url: String
+  user: ID!
+}
+
+type UpdateFileResponse implements IResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  data: File
+}
+
+type DeleteFileResponse implements IResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+}
+
+type Query {
+  getFiles(user: String!): [File]!
+}
+
+type Mutation {
+  deleteFile(id: ID!): DeleteFileResponse!
+  deleteAllFiles: DeleteFileResponse!
+  updateFile(id: ID!, name: String): UpdateFileResponse!
+}
+
+type Subscription {
+  fileChanged(userId: ID!): File!
+}

@@ -40,3 +40,10 @@ Thumbs.db
 
 # Next.js
 .next
+
+# Secrets
+.env*
+
+# uploads
+uploads
+public

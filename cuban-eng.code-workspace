@@ -1,0 +1,24 @@
+{
+  "folders": [
+    {
+      "name": "Next Frontend",
+      "path": "./apps/insta-share"
+    },
+    {
+      "name": "API Backend",
+      "path": "./apps/api/src"
+    },
+    {
+      "name": "Compressor Backend",
+      "path": "./apps/compressor/src"
+    },
+    {
+      "name": "Monorepo",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "eslint.format.enable": true,
+    "terminal.integrated.cwd": "${workspaceFolder:Monorepo}"
+  }
+}

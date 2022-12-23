@@ -1,0 +1,73 @@
+{
+  "name": "compressor",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/compressor/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/compressor",
+        "main": "apps/compressor/src/main.ts",
+        "tsConfig": "apps/compressor/tsconfig.app.json",
+        "assets": ["apps/compressor/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/compressor/src/environments/environment.ts",
+              "with": "apps/compressor/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "dependsOn": [
+        {
+          "target": "infra",
+          "projects": "self"
+        }
+      ],
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "compressor:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "compressor:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/compressor/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/compressor/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "infra": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up -d",
+        "cwd": "./docker"
+      }
+    }
+  },
+  "tags": []
+}

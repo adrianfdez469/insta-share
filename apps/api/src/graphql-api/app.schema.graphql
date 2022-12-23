@@ -1,0 +1,5 @@
+interface IResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+}
