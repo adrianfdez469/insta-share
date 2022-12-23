@@ -6,7 +6,9 @@
 - Backend: NestJs + GraphQl + Mongoose + RabbitMQ
 - DB: MongoDB
 - Infrastructure Dependencies: Docker (docker compose)
-- Others: Git
+- Message broker: RabbitMQ
+- Versioning System: Git
+
 ## How to run on dev enviroment
 
 - clone project `git clone GITHUB_URL`
@@ -21,7 +23,7 @@ Artefacts:
     - insta-share: nextjs web application
     - api:
       - express-api: Handles uploads and downloads (File System) (graphql is no used for know's security issues)
-      - graphql-api: Handles, user creation, login, file name modification (db), files listing, and others.
+      - graphql-api: Handles, user creation, login, files metada management (db), files listing, and others.
     - compressor: Microservice that handles the compression of files on the disk.
 
 
