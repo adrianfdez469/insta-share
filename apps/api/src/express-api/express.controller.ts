@@ -9,7 +9,7 @@ import { Multer, diskStorage } from 'multer';
 import { RMQ_PATTERNS } from '@cuban-eng/common'
 import { createReadStream } from 'fs';
 import { join } from 'path';
-import { AuthGuard } from '../auht/auth.guard';
+import { AuthGuard } from '../libs/auht/auth.guard';
 
 
 type File = Express.Multer.File;

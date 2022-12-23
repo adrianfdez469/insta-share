@@ -5,7 +5,7 @@ import { DeleteFileResponse, File, UpdateFileResponse, } from "@cuban-eng/common
 import { PubSub } from 'graphql-subscriptions';
 import { Inject, UseGuards } from "@nestjs/common";
 import { PUB_SUB } from "../../constants";
-import { AuthGuardGraphQl } from "../../auht/auth.guard";
+import { AuthGuardGraphQl } from "../../libs/auht/auth.guard";
 
 
 @Resolver('File')

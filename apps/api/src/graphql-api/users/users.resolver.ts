@@ -4,7 +4,7 @@ import { CreateUserResponse, DeleteUserResponse, LoginUserResponse, User } from 
 
 import { UsersService } from './users.service';
 import { UseGuards } from "@nestjs/common";
-import { AuthGuardGraphQl } from "../../auht/auth.guard";
+import { AuthGuardGraphQl } from "../../libs/auht/auth.guard";
 
 @Resolver('User')
 export class UsersResolver {
