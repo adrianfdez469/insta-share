@@ -1,13 +1,27 @@
-import { getGreeting } from '../support/app.po';
-
 describe('insta-share', () => {
-  beforeEach(() => cy.visit('/'));
+  describe('entry-point',  () => {   
+    beforeEach(() => cy.visit('/'));
+    it('should display hello message', () => {
+      cy.get('h2').contains('Hello there');
+    });
+  
+    it('should go to login on button "Sign in" click', () => {
+      cy.get('button').click();
+      cy.get('h1').contains('Sign in');
+      cy.get('input').focused()
+    })
+  })
 
-  it('should display welcome message', () => {
-    // Custom command example, see `../support/commands.ts` file
-    cy.login('my-email@something.com', 'myPassword');
+  describe('sign-in flow', () => {
+    beforeEach(() => cy.visit('/signin'));
+    
+    it('should go to signup con signup click', () => {
+      cy.get('a').click();
+      
+      cy.get('h1').contains('Sign up')
+    })
+  })
 
-    // Function helper example, see `../support/app.po.ts` file
-    getGreeting().contains('Welcome insta-share');
-  });
 });
+
+
