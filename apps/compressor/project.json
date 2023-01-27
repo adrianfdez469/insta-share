@@ -30,12 +30,6 @@
       }
     },
     "serve": {
-      "dependsOn": [
-        {
-          "target": "infra",
-          "projects": "self"
-        }
-      ],
       "executor": "@nrwl/js:node",
       "options": {
         "buildTarget": "compressor:build"
